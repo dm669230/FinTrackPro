@@ -1,9 +1,10 @@
-from fastapi import FastAPI,APIRouter, Depends, HTTPException
+from fastapi import FastAPI,APIRouter, Depends, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers.LoginRouter import router as auth_router
 from app.routers.AdminRouter import router as admin_router
 from app.routers.LoanManageRouter import router as loan_manage_router
 from app.routers.RepayTrackingRouter import router as repay_router
+from app.config.db import db_session, SessionLocal
 
 app = FastAPI()
 origins = [
@@ -22,6 +23,19 @@ app.add_middleware(
 @app.get("/")
 def home():
     return {"message": "Hello world !"}
+
+@app.middleware("http")
+async def db_session_middleware(request:Request, call_next):
+    #create a new session for the incoming request
+    session = SessionLocal()
+    token = db_session.set(session)
+    try:
+        # process the request and pass it to the next handler
+        response = await call_next(request)
+    finally:
+        db_session.reset(token)
+        session.close()
+    return response
 
 app.include_router(auth_router, prefix="/auth", tags=["AuthenticationAPI's"])
 app.include_router(admin_router, prefix="/admin_action", tags=["AdminAPI's"])
