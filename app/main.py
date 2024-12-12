@@ -6,7 +6,6 @@ from app.routers.LoginRouter import router as auth_router
 from app.routers.AdminRouter import router as admin_router
 from app.routers.LoanManageRouter import router as loan_manage_router
 from app.routers.RepayTrackingRouter import router as repay_router
-# from app.config.config import settings
 from app.config.db import SessionLocal, get_db
 from typing_extensions import Annotated
 from .config import config
