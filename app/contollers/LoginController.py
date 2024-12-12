@@ -10,7 +10,7 @@ import traceback
 
 def register_new_user(new_user_schema:auth_schema.NewUserRegister, db):
     try:
-        password=new_user_schema.password_hash.encode('utf-8')
+        password : str = new_user_schema.password_hash.encode('utf-8')
         
         hash_pass = bcrypt.hashpw(base64.b64encode(hashlib.sha256(password).digest()),bcrypt.gensalt())
         print('hash_pass : ', hash_pass)
