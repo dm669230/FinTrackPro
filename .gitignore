@@ -22,7 +22,10 @@ site_build
 venv
 docs.zip
 archive.zip
-
+*.ipynb
+dummy_loan_table_data.json
+dummy_repayment_data.json
+dummy_user_data.json
 # vim temporary files
 *~
 .*.sw?

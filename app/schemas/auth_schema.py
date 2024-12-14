@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from typing import Optional, List, Dict, Union
 
-class NewUserRegister(BaseModel):
+class NewUserRegisterSchema(BaseModel):
     name: Optional[str] = None
     email: Optional[str] = None
     phone_no: Optional[str] = None
