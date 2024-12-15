@@ -4,6 +4,7 @@ import bcrypt
 import base64, hashlib
 from app.schemas import repayment_schema as Reapay_schema
 from app.models import model as mdl
+from app.utils import utils
 from fastapi import Depends
 import traceback
 
@@ -21,10 +22,10 @@ def add_new_repayment(new_repay_schema:Reapay_schema.NewRepayRegisterSchema, db)
         db.add(new_repayment)
         db.commit()
 
-        return "Repayment Added Sucessfully"
+        return utils.HttpResponseFormatter(data= "Repayment Added Sucessfully")
     except Exception as e:
         traceback.print_exc()
         print(f"Error occured due to : {e}")
-        return f"Error occured due to : {e}"
+        return utils.HttpResponseFormatter(data= e, response_code=400)
 
     

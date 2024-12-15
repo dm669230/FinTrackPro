@@ -20,7 +20,7 @@ class LoansModel(BASE):
     id = Column(Integer, primary_key=True, index=True)
     user_id = Column(Integer, ForeignKey(UsersModel.id), index=True, primary_key=True)
     loan_amount = Column(Float, nullable=False, index = True)
-    loan_status = Column(String(100),nullable=False, index= True)
+    loan_status = Column(String(100),nullable=False, index= True,default="Pending")
     interest_rate = Column(Float, nullable=False, index= True)
     start_date = Column(Date, nullable= False, index = True)
     end_date = Column(Date, index=True)

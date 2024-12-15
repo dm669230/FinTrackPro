@@ -5,8 +5,12 @@ from dotenv import load_dotenv
 load_dotenv()  # Make sure to load environment variables from the .env file
 
 
+# to get a string like this run:
+# openssl rand -hex 32
+SECRET_KEY = "487daba42d2cacb9442ee2a6670782d0026cf21dd3c4d78a91ba1a1ec5118edd"
+ALGORITHM = "HS256"
+ACCESS_TOKEN_EXPIRE_MINUTES = 30
 
-SECRET_KEY = "83daa0256a2289b0fb23693bf1f6034d44396675749244721a2b20e896e11662"
 
 # Database setup
 DB_USER = "postgres"
@@ -16,7 +20,7 @@ SERVER_PORT = "5432"
 DB_NAME = "postgres"
 
 class Settings(BaseSettings):
-    app_name: str = "Awesome API"
+    app_name: str = "FinTrackPro"
     admin_email: str
     items_per_user: int = 50
     model_config = SettingsConfigDict()

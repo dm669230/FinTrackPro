@@ -4,11 +4,21 @@ import bcrypt
 from fastapi.security import OAuth2PasswordRequestForm, OAuth2PasswordBearer
 import base64, hashlib
 from psycopg2 import Binary
+from datetime import timedelta, timezone, datetime
 from typing import Annotated
+from pydantic import BaseModel
+import jwt
+from app.config.config import SECRET_KEY, ALGORITHM, ACCESS_TOKEN_EXPIRE_MINUTES
 from app.schemas import auth_schema as auth_schema
 from app.models import model as mdl
+from app.utils import utils
 from fastapi import Depends, HTTPException, status
 import traceback
+
+
+class Token(BaseModel):
+    access_token: str
+    token_type: str
 
 def hash_password(password: str) -> (str, str):
     # Generate a salt and hash the password with bcrypt
@@ -34,7 +44,15 @@ def validate_password(entered_password: str, stored_hash: str, stored_salt: str)
     # Compare the result with the stored hash
     return sha256_hash == stored_hash
 
-
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
+    to_encode = data.copy()
+    if expires_delta:
+        expire = datetime.now(timezone.utc) + expires_delta
+    else:
+        expire = datetime.now(timezone.utc) + timedelta(minutes=15)
+    to_encode.update({"exp": expire})
+    encoded_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
+    return encoded_jwt
 
 def register_new_user(new_user_schema:auth_schema.NewUserRegisterSchema, db):
     try:
@@ -74,9 +92,14 @@ def login(form_data, db):
     # Compare the double hashed entered password with the stored hash
     if not is_exist:
         raise HTTPException(status_code=400, detail="Incorrect username or password")
-    
+    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = create_access_token(data={"username": user_record.username, "user_id":user_record.id}, expires_delta=access_token_expires)
     # If the credentials are correct
-    return {"message": "Login successful", "username": user_record.username}
+    
+    response = utils.HttpResponseFormatter(data=[Token(access_token=access_token, token_type="bearer")], response_code=200, message="User Login Successfull")
+    return response
+
+
 
 
 
