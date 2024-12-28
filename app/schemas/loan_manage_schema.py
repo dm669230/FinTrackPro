@@ -14,3 +14,8 @@ class NewLoanApplySchema(BaseModel):
     interest_rate: Optional[float] = None
     start_date: Optional[str] = "YYYY-MM-DD"
     end_date: Optional[str] = "YYYY-MM-DD"
+
+class UpdateLoanStatusSchema(BaseModel):
+    loan_status: Optional[str] = "Pending"
+
+

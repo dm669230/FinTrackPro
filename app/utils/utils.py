@@ -1,4 +1,4 @@
-def HttpResponseFormatter(data, response_code = 200, error_message = None, message = None ):
+def HttpResponseFormatter(data = None, response_code = 200, error_message = None, message = None ):
     if response_code == 200:
         return  {
                 'status_code': 200, 

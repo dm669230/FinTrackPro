@@ -25,7 +25,8 @@ class LoansModel(BASE):
     start_date = Column(Date, nullable= False, index = True)
     end_date = Column(Date, index=True)
     created_at = Column(TIMESTAMP, server_default=func.now())
-
+    updated_at = Column(TIMESTAMP, server_default=None, onupdate=func.now())  # Auto-update on row updates
+    
 
 class RepaymentsModel(BASE):
     __tablename__ = "repayments"

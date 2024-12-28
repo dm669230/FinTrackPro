@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends,Body, Request
 from app.config.db import get_db
 from app.schemas import repayment_schema 
 from sqlalchemy.orm import Session
-from app.contollers.RepaymentController import add_new_repayment
+from app.contollers.RepaymentController import add_new_repayment, add_repayment
 
 router = APIRouter()
 
@@ -14,4 +14,10 @@ def repay_track():
 @router.post("/repayment_register")
 def repayment_register(new_repayment_schema:repayment_schema.NewRepayRegisterSchema, db:Session=Depends(get_db)):
     response = add_new_repayment(new_repayment_schema,db)
+    return response
+
+
+@router.post("/add")
+def repayment_add(repayment_add_schema:repayment_schema.NewRepayAddSchema, db:Session=Depends(get_db)):
+    response = add_repayment(repayment_add_schema,db)
     return response

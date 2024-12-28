@@ -1,0 +1,15 @@
+version: '3'
+services:
+  postgres:
+    image: postgres:17-bullseye
+    ports:
+      - "5433:5432"  # Exposing PostgreSQL on port 5433 on the host
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+    volumes:
+      - postgres_data:/var/lib/postgresql/data  # Persistent data storage
+
+volumes:
+  postgres_data:
+
